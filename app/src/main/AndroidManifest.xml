@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Needed today: the proactive nudge posts a notification -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- The recurring checkpoint is an AlarmManager alarm (see nudge/Nudge.kt
+         for why not WorkManager). Exact alarms keep short test intervals
+         honest; without the grant the code degrades to inexact rather than
+         failing. -->
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Localhost only: talks to the llama.cpp server in Termux on this
+         phone. See res/xml/network_security_config.xml — cleartext is
+         permitted solely for 127.0.0.1. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Requested on the Permissions screen. Real system dialogs. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <!-- Camera scan works on devices without one too — just disabled -->
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
+
+    <application
+        android:label="Arokya"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+        android:supportsRtl="true">
+
+        <!-- LiteRT-LM GPU acceleration (optional, degrades gracefully if absent) -->
+        <uses-native-library android:name="libvndksupport.so" android:required="false"/>
+        <uses-native-library android:name="libOpenCL.so" android:required="false"/>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- Long-press-icon shortcut: "Talk to Arokya" straight into voice. -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+
+            <!-- Assist gesture: if the user makes Arokya their device assistant
+                 (Settings > Default apps > Digital assistant app), the assist
+                 gesture opens Arokya listening — the closest thing to Siri. -->
+            <intent-filter>
+                <action android:name="android.intent.action.ASSIST" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Share target: a food video shared from anywhere (gallery,
+                 WhatsApp, a downloaded reel) runs the reel-to-recipe pipeline. -->
+            <intent-filter android:label="Analyze food video">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="video/*" />
+            </intent-filter>
+
+            <!-- Instagram's share button sends the reel's URL as plain text,
+                 never the video. Accepting it lets Arokya appear in that share
+                 sheet and explain the download-then-share workaround. -->
+            <intent-filter android:label="Analyze food reel">
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <!-- The recurring checkpoint alarm lands here. Not exported — only our
+             own PendingIntent and in-process broadcast reach it. -->
+        <receiver
+            android:name=".nudge.NudgeAlarmReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.arokya.app.NUDGE_CHECKPOINT" />
+            </intent-filter>
+        </receiver>
+
+        <!-- The nudge's "Not now" button: dismisses and stops the schedule
+             without opening the app. -->
+        <receiver
+            android:name=".nudge.NudgeActionReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.arokya.app.NUDGE_NOT_NOW" />
+            </intent-filter>
+        </receiver>
+
+        <!-- A user-set reminder alarm coming due. -->
+        <receiver
+            android:name=".reminder.ReminderReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.arokya.app.REMINDER_FIRE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- AlarmManager loses alarms on reboot; re-arm reminders after boot. -->
+        <receiver
+            android:name=".reminder.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Quick Settings tile: "Talk to Arokya" in the pull-down shade. -->
+        <service
+            android:name=".assistant.VoiceTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_nudge"
+            android:label="@string/tile_talk"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+    </application>
+</manifest>

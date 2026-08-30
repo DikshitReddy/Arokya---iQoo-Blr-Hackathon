@@ -1,0 +1,65 @@
+# ---------------------------------------------------------------------------
+# Arokya — .gitignore (Android / Gradle / Kotlin / IntelliJ)
+# ---------------------------------------------------------------------------
+
+# Build output
+.gradle/
+build/
+app/build/
+*/build/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Kotlin
+.kotlin/
+
+# Local, machine-specific config — NEVER commit
+local.properties
+*.bak
+gradle.properties.bak
+
+# NOTE: gradle.properties is tracked, but its `org.gradle.java.home` line is a
+# machine-specific JDK path. Keep that path local (each dev sets their own) or
+# move it to gradle.properties.local / an env override before committing.
+
+# IDE — Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+
+# Signing / secrets — NEVER commit
+*.jks
+*.keystore
+keystore.properties
+google-services.json
+
+# APK / build artifacts
+*.apk
+*.aab
+*.ap_
+*.aar
+*.dex
+*.class
+
+# On-device model weights — far too large for VCS; provisioned to the device
+# at runtime (see README "Provisioning the model")
+*.litertlm
+*.gguf
+*.task
+*.tflite
+*.bin
+*.onnx
+
+# Logs & scratch
+*.log
+/scratchpad/
+/tmp/
+
+# Claude Code — keep shared config, ignore local/personal state
+.claude/settings.local.json
+.claude/projects/
+.claude/**/tool-results/

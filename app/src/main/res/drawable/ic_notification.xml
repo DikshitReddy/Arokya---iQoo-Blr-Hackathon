@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Status-bar notification icon: the Arokya smiley mark as a FLAT WHITE
+  silhouette on transparent. Android tints small icons to a single colour and
+  keys them off alpha, so this must be monochrome — the circle ring, the eye
+  dot, and the smile, all white. The colourful launcher icon can't be used
+  here (it would render as a white blob).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- circle ring -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="1.9"
+        android:fillColor="#00000000"
+        android:pathData="M12,2.6 a9.4,9.4 0 1,0 0.01,0 z" />
+
+    <!-- eye dot (upper-left) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M9,8.4 m-1.7,0 a1.7,1.7 0 1,0 3.4,0 a1.7,1.7 0 1,0 -3.4,0" />
+
+    <!-- smile -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M7.6,12.6 Q12,16.6 16.4,12.6" />
+</vector>

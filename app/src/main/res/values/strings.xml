@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Arokya</string>
+    <string name="tile_talk">Talk to Arokya</string>
+    <string name="shortcut_talk_short">Talk</string>
+    <string name="shortcut_talk_long">Talk to Arokya</string>
+</resources>

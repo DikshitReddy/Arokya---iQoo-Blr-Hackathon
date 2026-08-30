@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Long-press the app icon -> "Talk to Arokya" launches straight into voice
+  listening (MainActivity reads EXTRA_START_LISTENING). A lightweight
+  hands-free entry point that needs no assistant role.
+-->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="talk"
+        android:enabled="true"
+        android:icon="@drawable/ic_nudge"
+        android:shortcutShortLabel="@string/shortcut_talk_short"
+        android:shortcutLongLabel="@string/shortcut_talk_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.arokya.app"
+            android:targetClass="com.arokya.app.MainActivity">
+            <extra
+                android:name="arokya.start_listening"
+                android:value="true" />
+        </intent>
+    </shortcut>
+</shortcuts>

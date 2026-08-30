@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Arokya app-icon mark: white ring + green eye + green smile, drawn on the
+  @color/ic_launcher_bg teal background layer (wired in the adaptive-icon XML).
+
+  SIZING: adaptive-icon foreground art must stay inside the ~33-radius central
+  safe zone of the 108 canvas or the launcher shape mask clips it. The ring's
+  outer edge sits at radius ~29 (26 + half of stroke 6) — a confident, near-
+  edge-of-safe-zone mark that fills the plate without risking a clip.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- white ring: centre (54,54) radius 26, stroke 6 -> outer edge ~29 -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="6"
+        android:fillColor="#00000000"
+        android:pathData="M54,28 a26,26 0 1,0 0.01,0 z" />
+
+    <!-- green eye dot -->
+    <path
+        android:fillColor="#12E29B"
+        android:pathData="M45,45 m-5.6,0 a5.6,5.6 0 1,0 11.2,0 a5.6,5.6 0 1,0 -11.2,0" />
+
+    <!-- green smile -->
+    <path
+        android:strokeColor="#12E29B"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M42,60 Q54,71 67,60" />
+</vector>
